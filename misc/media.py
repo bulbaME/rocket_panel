@@ -34,7 +34,7 @@ def get_media(id, count):
             for i in range((count - 1) // 33 + 1):
                 data.extend(pool.apply(get_media_noexcept_w, (int(id), token, max_id)))
                 bar.next()
-                max_id = data[-1]['id']
+                max_id = data[-1]['id'] if len(data) > 0 else max_id
 
             pool.close()
             pool.join()
