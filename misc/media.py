@@ -79,7 +79,7 @@ def get_likes(code, count):
     data = [v['node'] for v in data]
     return data
 
-def get_comments_noexcept_w(code, token, max_id):
+def get_comments_noexcept_w(id, token, max_id):
     data = []
     api = InstagramAPI(token=token)
 
@@ -87,7 +87,7 @@ def get_comments_noexcept_w(code, token, max_id):
 
     while True:
         try:
-            r = api.get_media_comments(code, min_id=max_id)
+            r = api.get_media_comments(id, min_id=max_id)
             check_response(r)
             data = r
             break
@@ -99,7 +99,7 @@ def get_comments_noexcept_w(code, token, max_id):
         
     return (data['comments'], data['next_min_id'])
 
-def get_comments(code, count):
+def get_comments(id, count):
     data = []
 
     token = get_token()
@@ -108,7 +108,7 @@ def get_comments(code, count):
 
         with Pool(processes=8) as pool:
             for i in range((count - 1) // 15 + 1):
-                (d, max_id) = pool.apply(get_comments_noexcept_w, (code, token, max_id))
+                (d, max_id) = pool.apply(get_comments_noexcept_w, (id, token, max_id))
                 bar.next()
                 data.extend(d)
 
