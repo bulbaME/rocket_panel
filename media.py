@@ -106,7 +106,7 @@ def action_likes(api, post):
             break
 
 def action_comments(api, post):
-    comment_data = get_comments(post['code'], int(post['comment_count']))
+    comment_data = get_comments(post['id'], int(post['comment_count']))
     print(f'{len(comment_data)} comments retrieved')
 
     while True:
