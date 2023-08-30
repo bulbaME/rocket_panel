@@ -1,8 +1,10 @@
-from misc.followers import get_followers
-from misc.user import get_users_info
+from .misc.followers import get_followers
+from .misc.user import get_users_info
 
 def action_followers(api, user_data):
     count = 100
+
+    print(f'\n@{user_data["username"]} has {user_data["follower_count"]} followers')
 
     try:
         t = input('Followers count (100): ')
@@ -16,7 +18,7 @@ def action_followers(api, user_data):
     print(f'{len(response)} followers retrieved')
     
     while True:
-        c = input(f'(1) Retrive each users\' info into {user_data["username"]}.followers.csv\n(2) Retrtieve user handles into {user_data["username"]}.followers.txt\n: ')
+        c = input(f'(1) Retrive each users\' info into {user_data["username"]}.followers.csv\n(2) Retrtieve user handles into {user_data["username"]}.followers.txt\n(3) Close\n: ')
         c = int(c)
         if c == 1:
             data = get_users_info(response)
@@ -43,4 +45,5 @@ def action_followers(api, user_data):
             fw.close()
 
             break
-
+        elif c == 3:
+            break

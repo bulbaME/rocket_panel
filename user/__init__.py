@@ -1,7 +1,7 @@
-from misc.user import get_user_info_by_id, get_user_info, parse_user_data
-from followers import action_followers
-from followings import action_following
-from media import action_media
+from .misc.user import get_user_info_by_id, get_user_info, parse_user_data
+from .followers import action_followers
+from .followings import action_following
+from .media import action_media
 
 def user_actions(api):
     user_name = input('Instagram handle - @')
@@ -10,7 +10,7 @@ def user_actions(api):
 
     while True:
         try:
-            print('Retrieving info...')
+            print('\nRetrieving info...')
             user_data = get_user_info(api, user_name)
             user_id_data = get_user_info_by_id(api, int(user_data['id']))
             break
@@ -18,12 +18,9 @@ def user_actions(api):
             print(e)
             if input('Repeat? (y/n): ').lower().strip() != 'y':
                 return
-    try:
-        print('Info retrieved')
-    except BaseException as e:
-        print(e)
-        return
-    
+            
+    print('Info retrieved')
+
     while True:
         print(f'\n@{user_name}')
         c = input('> ').strip()

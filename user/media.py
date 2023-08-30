@@ -1,5 +1,5 @@
-from misc.media import get_media, get_likes, get_comments
-from misc.user import get_users_info
+from .misc.media import get_media, get_likes, get_comments
+from .misc.user import get_users_info
 from datetime import datetime
 
 def action_media(api, user_data):
@@ -77,7 +77,7 @@ def action_likes(api, post):
     print(f'{len(like_data)} likes retrieved')
 
     while True:
-        c = input(f'(1) Retrive each users\' info into {post["code"]}.post.likes.csv\n(2) Retrtieve user handles into {post["code"]}.post.likes.txt\n: ')
+        c = input(f'(1) Retrive each users\' info into {post["code"]}.post.likes.csv\n(2) Retrtieve user handles into {post["code"]}.post.likes.txt\n(3) Close\n: ')
         c = int(c)
         if c == 1:
             data = get_users_info(like_data, id_f='id')
@@ -104,13 +104,15 @@ def action_likes(api, post):
             fw.close()
 
             break
+        elif c == 3:
+            break
 
 def action_comments(api, post):
     comment_data = get_comments(post['id'], int(post['comment_count']))
     print(f'{len(comment_data)} comments retrieved')
 
     while True:
-        c = input(f'(1) Retrive each users\' info into {post["code"]}.post.comments.csv\n(2) Retrtieve user handles into {post["code"]}.post.comments.txt\n: ')
+        c = input(f'(1) Retrive each users\' info into {post["code"]}.post.comments.csv\n(2) Retrtieve user handles into {post["code"]}.post.comments.txt\n(3) Close\n: ')
         c = int(c)
         if c == 1:
             data = get_users_info(comment_data, id_f='user_id')
@@ -137,3 +139,6 @@ def action_comments(api, post):
             fw.close()
 
             break
+        elif c == 3:
+            break
+        

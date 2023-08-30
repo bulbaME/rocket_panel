@@ -1,9 +1,3 @@
-def get_token():
-    fr = open('TOKEN')
-    token = fr.readline().strip()
-    fr.close()
-    return token
-
 def remove_duplicates(data, dp_f='pk'):
     r = []
     c = []
