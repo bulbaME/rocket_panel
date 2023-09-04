@@ -108,11 +108,11 @@ def action_likes(api, post):
             break
 
 def action_comments(api, post):
-    comment_data = get_comments(post['id'], int(post['comment_count']))
+    comment_data = get_comments(post['pk'], int(post['comment_count']))
     print(f'{len(comment_data)} comments retrieved')
 
     while True:
-        c = input(f'(1) Retrive each users\' info into {post["code"]}.post.comments.csv\n(2) Retrtieve user handles into {post["code"]}.post.comments.txt\n(3) Close\n: ')
+        c = input(f'(1) Retrive each users\' info into {post["code"]}.post.comments.csv\n(2) Retrtieve user handles into {post["code"]}.post.comments.txt\n(3) Show comments\n(4) Close\n: ')
         c = int(c)
         if c == 1:
             data = get_users_info(comment_data, id_f='user_id')
@@ -140,5 +140,11 @@ def action_comments(api, post):
 
             break
         elif c == 3:
+            print('Comments:')
+            for i in range(len(comment_data)):
+                v = comment_data[i]
+                print(f'({i+1}) @{v["user"]["username"]}: {v["text"]}')
+            print()
+        elif c == 4:
             break
         

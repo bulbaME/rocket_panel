@@ -1,4 +1,4 @@
-from .misc.followers import get_followers
+from .misc.followers import get_followers_1, get_followers_2, get_followers_pagintation_type
 from .misc.user import get_users_info
 
 def action_followers(api, user_data):
@@ -13,8 +13,16 @@ def action_followers(api, user_data):
         pass
 
     count = min(count, int(user_data['follower_count']))
+    p = get_followers_pagintation_type(int(user_data['pk']), api)
+    response = {}
 
-    response = get_followers(int(user_data['pk']), count)
+    if p == 1:
+        response = get_followers_1(int(user_data['pk']), count)
+    elif p == 2:
+        response = get_followers_2(int(user_data['pk']), count)
+    else:
+        return
+
     print(f'{len(response)} followers retrieved')
     
     while True:

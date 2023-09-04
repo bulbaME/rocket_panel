@@ -26,22 +26,21 @@ def get_media_noexcept_w(id, token, max_id):
 
 def get_media(id, count):
     data = []
-    req_count = (count - 1) // 33 + 1
     token = get_token()
     err = {}
 
-    with Bar('Retrieving media', max=req_count, suffix='%(percent)d%%') as bar:
+    with Bar('Retrieving media', max=count, suffix='%(percent)d%%') as bar:
         max_id = ''
 
         with Pool(processes=8) as pool:
-            for i in range(req_count):
+            while count > len(data):
                 (d, _max_id, e) = pool.apply(get_media_noexcept_w, (id, token, max_id))
-                bar.next()
+                bar.next(len(d))
                 data.extend(d)
                 if (e != None):
                     err['e'] = e
                     err['max_id'] = max_id
-                    err['left'] = req_count - i
+                    err['left'] = count - len(data)
                     bar.finish()
                     break
                 max_id = _max_id
@@ -62,14 +61,14 @@ def get_media(id, count):
                 max_id = err['max_id']
 
                 with Pool(processes=8) as pool:
-                    for i in range(err['left']):
+                    while count > len(data):
                         (d, _max_id, e) = pool.apply(get_media_noexcept_w, (id, token, max_id))
-                        bar.next()
+                        bar.next(len(d))
                         data.extend(d)
                         if (e != None):
                             _err['e'] = e
                             _err['max_id'] = max_id
-                            _err['left'] = req_count - i
+                            _err['left'] = count - len(data)
                             bar.finish()
                             break
                         max_id = _max_id
@@ -168,8 +167,13 @@ def get_comments_noexcept_w(id, token, max_id):
             i -= 1
             if i == 0:
                 return ([], max_id, e)
-        
-    return (data['comments'], data['next_min_id'], None)
+    
+    try:
+        max_id = data['next_max_id']
+    except BaseException:
+        pass
+
+    return (data['comments'], max_id, None)
 
 def get_comments(id, count):
     data = []
