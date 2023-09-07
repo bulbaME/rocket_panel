@@ -89,7 +89,7 @@ def get_followers_noexcept_w_2(id, token, max_id):
 
     while True:
         try:
-            r = api.get_user_followers(id, max_id=max_id)
+            r = api.get_user_followers(id, count=100, max_id=max_id)
             check_response(r)
             data = r
             break
