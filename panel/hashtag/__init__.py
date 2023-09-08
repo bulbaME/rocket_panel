@@ -1,5 +1,6 @@
 from misc import check_response
 from .media import action_media
+from misc import print_g, print_e, RB, RS
 
 def hashtag_actions(api):
     name = input('Instagram hashtag - #').strip()
@@ -7,21 +8,21 @@ def hashtag_actions(api):
 
     while True:
         try:
-            print('\nRetrieving info...')
+            print_g('\nRetrieving info...')
             data = api.get_hashtag_info(name)
             check_response(data)
             data = data['data']
             break
         except BaseException as e:
-            print(e)
+            print_e(e)
             if input('Repeat? (y/n): ').lower().strip() != 'y':
                 return
             
-    print('Info retrieved')
+    print_g('Info retrieved')
 
     while True:
         print(f'\n#{name}')
-        c = input('> ').strip().lower()
+        c = input(f'#> ').strip().lower()
 
         if c == 'info':
             print(data['subtitle'])

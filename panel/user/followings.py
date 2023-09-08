@@ -1,5 +1,6 @@
 from .misc.following import get_following
 from .misc.user import get_users_info
+from misc import print_g, print_e
 
 def action_following(api, user_data):
     count = 100
@@ -15,7 +16,7 @@ def action_following(api, user_data):
     count = min(count, int(user_data['following_count']))
 
     response = get_following(int(user_data['pk']), count)
-    print(f'{len(response)} followings retrieved')
+    print_g(f'{len(response)} followings retrieved')
     
     while True:
         c = input(f'(1) Retrive each users\' info into {user_data["username"]}.following.csv\n(2) Retrtieve user handles into {user_data["username"]}.following.txt\n(3) Close\n: ')

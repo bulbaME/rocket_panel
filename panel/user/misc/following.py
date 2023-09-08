@@ -1,7 +1,7 @@
 from rocketapi import InstagramAPI
 from misc import check_response
 from . import remove_duplicates
-from misc import get_token
+from misc import get_token, print_g, print_e
 from progress.bar import Bar
 from multiprocessing import Pool
 
@@ -41,9 +41,9 @@ def get_following(id, count):
     err = list(filter(lambda v: v[0] != None, err))
 
     while len(err) > 0:
-        print(f'\n{len(err)} / {req_count} requests failed:')
+        print_e(f'\n{len(err)} / {req_count} requests failed:')
         for (e, _) in err:
-            print(e)
+            print_e(e)
         
         c = input('\nDo you want to repeat? (y/n): ').strip().lower()
         if c != 'y':

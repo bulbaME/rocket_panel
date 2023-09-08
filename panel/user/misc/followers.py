@@ -1,7 +1,7 @@
 from rocketapi import InstagramAPI
 from misc import check_response
 from . import remove_duplicates
-from misc import get_token
+from misc import get_token, print_g, print_e
 from progress.bar import Bar
 from multiprocessing import Pool
 
@@ -10,21 +10,21 @@ def get_followers_pagintation_type(id, api):
     
     while True:
         try:
-            print('\nRetrieving pagination type...')
+            print_g('\nRetrieving pagination type...')
             data = api.get_user_followers(id)
             check_response(data)
             break
         except BaseException as e:
-            print(e)
+            print_e(e)
             if input('Repeat? (y/n): ').lower().strip() != 'y':
                 return -1
             
     try:
         int(data['next_max_id'])
-        print("Pagination type decimal\n")
+        print_g("Pagination type decimal\n")
         return 1
     except BaseException:
-        print("Pagination type base64\n")
+        print_g("Pagination type base64\n")
         return 2
 
 def get_followers_noexcept_w_1(id, token, max_id):
@@ -63,9 +63,9 @@ def get_followers_1(id, count):
     err = list(filter(lambda v: v[0] != None, err))
 
     while len(err) > 0:
-        print(f'\n{len(err)} / {req_count} requests failed:')
+        print_e(f'\n{len(err)} / {req_count} requests failed:')
         for (e, _) in err:
-            print(e)
+            print_e(e)
         
         c = input('\nDo you want to repeat? (y/n): ').strip().lower()
         if c != 'y':
@@ -81,7 +81,7 @@ def get_followers_1(id, count):
     
     return remove_duplicates(data)
 
-def get_followers_noexcept_w_2(id, token, max_id):
+def get_followers_noexcept_w_2(id, token, max_id, count=100):
     data = []
     api = InstagramAPI(token=token)
 
@@ -89,7 +89,7 @@ def get_followers_noexcept_w_2(id, token, max_id):
 
     while True:
         try:
-            r = api.get_user_followers(id, count=100, max_id=max_id)
+            r = api.get_user_followers(id, count=count, max_id=max_id)
             check_response(r)
             data = r
             break
@@ -125,12 +125,17 @@ def get_followers_2(id, count):
             pool.join()
 
         while len(err.keys()) > 0:
-            print(f'\Followers request failed:')
-            print(err['e'])
+            print_e(f'\Followers request failed:')
+            print_e(err['e'])
             
             c = input('\nRepeat? (y/n): ').strip().lower()
             if c != 'y':
                 break
+
+            flb = input('Do you want to fallback for 12 users / request? (y/n): ').strip().lower()
+            count = 100
+            if flb == 'y':
+                count = 12
             
             _err = {}
             with Bar('Retrieving followers', max=err['left'], suffix='%(percent)d%%') as bar:
@@ -138,7 +143,7 @@ def get_followers_2(id, count):
 
                 with Pool(processes=8) as pool:
                     while count > len(data):
-                        (d, _max_id, e) = pool.apply(get_followers_noexcept_w_2, (id, token, max_id))
+                        (d, _max_id, e) = pool.apply(get_followers_noexcept_w_2, (id, token, max_id, count))
                         bar.next(len(d))
                         data.extend(d)
                         if (e != None):

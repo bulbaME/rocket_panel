@@ -4,8 +4,11 @@ from misc import get_token, check_response
 from datetime import datetime
 from progress.bar import Bar
 from multiprocessing import Pool
+from user.misc.user import get_users_info
+from user.misc import remove_duplicates
+from misc import print_g, print_e
 
-def get_media_noexcept_w(name, token, t):
+def get_media_noexcept_w(id, token, t):
     data = []
     api = InstagramAPI(token=token)
 
@@ -13,7 +16,7 @@ def get_media_noexcept_w(name, token, t):
 
     while True:
         try:
-            r = api.get_hashtag_media(name, max_id=t[0], page=t[1])
+            r = api.get_location_media(id, max_id=t[0], page=t[1])
             check_response(r)
             data = r
             break
@@ -32,7 +35,7 @@ def get_media_noexcept_w(name, token, t):
 
     return (posts, (max_id, page), None)
 
-def get_media(name, count):
+def get_media(id, count):
     data = []
     token = get_token()
     err = {}
@@ -42,7 +45,7 @@ def get_media(name, count):
 
         with Pool(processes=8) as pool:
             while True:
-                (d, _t, e) = pool.apply(get_media_noexcept_w, (name, token, t))
+                (d, _t, e) = pool.apply(get_media_noexcept_w, (id, token, t))
                 bar.next(n=len(d))
                 data.extend(d)
                 if len(data) >= count:
@@ -59,8 +62,8 @@ def get_media(name, count):
             pool.join()
 
         while len(err.keys()) > 0:
-            print(f'\nMedia request failed:')
-            print(err['e'])
+            print_e(f'\nMedia request failed:')
+            print_e(err['e'])
             
             c = input('\nRepeat? (y/n): ').strip().lower()
             if c != 'y':
@@ -73,7 +76,7 @@ def get_media(name, count):
 
                 with Pool(processes=8) as pool:
                     while True:
-                        (d, _t, e) = pool.apply(get_media_noexcept_w, (name, token, t))
+                        (d, _t, e) = pool.apply(get_media_noexcept_w, (id, token, t))
                         bar.next(n=len(d))
                         c += len(d)
                         data.extend(d)
@@ -89,9 +92,7 @@ def get_media(name, count):
     
     return data
 
-def action_media(api, hashtag_data):
-    print(f'#{hashtag_data["name"]} has {hashtag_data["media_count"]} media')
-
+def action_media(api, location_data):
     count = 50
 
     try:
@@ -100,32 +101,67 @@ def action_media(api, hashtag_data):
     except BaseException:
         pass
 
-    count = min(count, int(hashtag_data['media_count']))
-
-    data = get_media(hashtag_data['name'], count)
-    print(f'{len(data)} posts retrieved')
+    data = get_media(location_data['location_id'], count)
+    print_g(f'{len(data)} posts retrieved')
     count = len(data)
 
     while True:
-        print(f'\n#{hashtag_data["name"]} - {count} media')
+        print(f'\n! {location_data["name"]} - {count} media')
         c = input('media> ').strip()
 
         if c == 'help':
             print(f'''Commands:
     show - list all retrieved posts
+    users - get users who posted
     select - select a post by its index
     exit - close media interface''')
         elif c == 'exit':
             return
+        elif c == 'users':
+            users = [p['user'] for p in data]
+            users = remove_duplicates(users)
+            print_g(f'Retrieved {len(users)} unique users')
+            
+            while True:
+                c = input(f'(1) Retrive each users\' info into {location_data["name"]}!.users.csv\n(2) Retrtieve user handles into {location_data["name"]}!.users.txt\n(3) Close\n: ')
+                c = int(c)
+                if c == 1:
+                    data = get_users_info(users)
+                    s = ''
+                    
+                    for k in data[0].keys():
+                        s += k + ', '
+                    s += '\n'
+
+                    for d in data:
+                        for v in d.values():
+                            s += str(v) + ', '
+                        s += '\n'
+
+                    fw = open(f'output/{location_data["name"]}!.users.csv', 'w', encoding='utf-8')
+                    fw.write(s)
+                    fw.close()
+
+                    break
+                elif c == 2:
+                    fw = open(f'output/{location_data["name"]}!.users.txt', 'w')
+                    for u in users:
+                        fw.write(f'@{u["username"]}\n')
+                    fw.close()
+
+                    break
+                elif c == 3:
+                    break
+
         elif c == 'show':
             for i in range(count):
                 print(f'({i+1}) {"no caption text" if data[i]["caption"] == None else data[i]["caption"]["text"]} [{datetime.fromtimestamp(int(data[i]["taken_at"]))}]')
         elif c =='select':
-            action_post(api, hashtag_data, data)
+            action_post(api, location_data, data)
         else:
             print('Incorrect command, try "help"')
 
-def action_post(api, hashtag_data, media):
+def action_post(api, location_data, media):
     post = {}
     post_i = 0
 
@@ -134,7 +170,7 @@ def action_post(api, hashtag_data, media):
         post_i = int(post_i)
         post = media[post_i - 1]
     except BaseException:
-        print('Invalid selection number')
+        print_e('Invalid selection number')
         return
     
     print('Selected post')
@@ -142,7 +178,7 @@ def action_post(api, hashtag_data, media):
     print(f'{post["comment_count"]} comments, {post["like_count"]} likes')
 
     while True:
-        print(f'\n#{hashtag_data["name"]} - post {post_i}')
+        print(f'\n! {location_data["name"]} - post {post_i}')
         c = input('post> ').strip()
 
         if c == 'help':

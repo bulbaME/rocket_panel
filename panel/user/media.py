@@ -1,6 +1,7 @@
 from .misc.media import get_media, get_likes, get_comments
 from .misc.user import get_users_info
 from datetime import datetime
+from misc import print_g, print_e
 
 def action_media(api, user_data):
     print(f'@{user_data["username"]} has {user_data["media_count"]} media')
@@ -16,7 +17,7 @@ def action_media(api, user_data):
     count = min(count, int(user_data['media_count']))
 
     data = get_media(int(user_data['pk']), count)
-    print(f'{len(data)} posts retrieved')
+    print_g(f'{len(data)} posts retrieved')
     count = len(data)
 
     while True:
@@ -47,7 +48,7 @@ def action_post(api, user_data, media):
         post_i = int(post_i)
         post = media[post_i - 1]
     except BaseException:
-        print('Invalid selection number')
+        print_e('Invalid selection number')
         return
     
     print('Selected post')
@@ -74,7 +75,7 @@ def action_post(api, user_data, media):
 
 def action_likes(api, post):
     like_data = get_likes(post['code'], int(post['like_count']))
-    print(f'{len(like_data)} likes retrieved')
+    print_g(f'{len(like_data)} likes retrieved')
 
     while True:
         c = input(f'(1) Retrive each users\' info into {post["code"]}.post.likes.csv\n(2) Retrtieve user handles into {post["code"]}.post.likes.txt\n(3) Close\n: ')
@@ -109,7 +110,7 @@ def action_likes(api, post):
 
 def action_comments(api, post):
     comment_data = get_comments(post['pk'], int(post['comment_count']))
-    print(f'{len(comment_data)} comments retrieved')
+    print_g(f'{len(comment_data)} comments retrieved')
 
     while True:
         c = input(f'(1) Retrive each users\' info into {post["code"]}.post.comments.csv\n(2) Retrtieve user handles into {post["code"]}.post.comments.txt\n(3) Show comments\n(4) Close\n: ')

@@ -1,7 +1,7 @@
 from rocketapi import InstagramAPI
 from misc import check_response
 from . import remove_duplicates
-from misc import get_token
+from misc import get_token, print_g, print_e
 from progress.bar import Bar
 from multiprocessing import Pool
 
@@ -49,8 +49,8 @@ def get_media(id, count):
             pool.join()
 
         while len(err.keys()) > 0:
-            print(f'\nMedia request failed:')
-            print(err['e'])
+            print_e(f'\nMedia request failed:')
+            print_e(err['e'])
             
             c = input('\nRepeat? (y/n): ').strip().lower()
             if c != 'y':
@@ -122,8 +122,8 @@ def get_likes(code, count):
             pool.join()
 
         while len(err.keys()) > 0:
-            print(f'\nLikes request failed:')
-            print(err['e'])
+            print_e(f'\nLikes request failed:')
+            print_e(err['e'])
             
             c = input('\nRepeat? (y/n): ').strip().lower()
             if c != 'y':
@@ -201,8 +201,8 @@ def get_comments(id, count):
             pool.join()
 
         while len(err.keys()) > 0:
-            print(f'\nComments request failed:')
-            print(err['e'])
+            print_e(f'\nComments request failed:')
+            print_e(err['e'])
             
             c = input('\nRepeat? (y/n): ').strip().lower()
             if c != 'y':
