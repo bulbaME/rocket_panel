@@ -133,8 +133,14 @@ async def select_menu_command(update: Update, context: ContextTypes.DEFAULT_TYPE
     post = context.user_data['media'][media_i]
     time = datetime.fromtimestamp(int(post["taken_at"]))
     context.user_data['post'] = post
+    url = ''
 
-    res = requests.get(post['carousel_media'][0]['image_versions2']['candidates'][0]['url'])
+    try:
+        url = post['carousel_media'][0]['image_versions2']['candidates'][0]['url']
+    except BaseException:
+        url = post['image_versions2']['candidates'][0]['url']
+
+    res = requests.get(url)
     fw = open('data/tmp.png', 'wb')
     fw.write(res.content)
     fw.close()
