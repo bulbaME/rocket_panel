@@ -2,7 +2,7 @@ from .misc.user import get_user_info_by_id, get_user_info, parse_user_data
 from .followers import action_followers
 from .followings import action_following
 from .media import action_media
-from misc import RB, RS, print_g, print_e
+from panel.misc import RB, RS, print_g, print_e
 
 def user_actions(api):
     user_name = input('Instagram handle - @')

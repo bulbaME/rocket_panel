@@ -1,7 +1,7 @@
 from rocketapi import InstagramAPI
-from misc import check_response
+from panel.misc import check_response
 from . import remove_duplicates
-from misc import get_token, print_g, print_e
+from panel.misc import get_token, print_g, print_e
 from progress.bar import Bar
 from multiprocessing import Pool
 
@@ -20,8 +20,8 @@ def get_followings_noexcept_w(id, token, max_id):
         except BaseException as e:
             i -= 1
             if i == 0:
-                return ([], e)
-        
+                return (max_id, e) 
+            
     return (data, None)
 
 def get_following(id, count):

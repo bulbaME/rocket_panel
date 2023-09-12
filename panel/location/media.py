@@ -1,12 +1,12 @@
-from user.media import action_likes, action_comments
+from panel.user.media import action_likes, action_comments
 from rocketapi import InstagramAPI
-from misc import get_token, check_response
+from panel.misc import get_token, check_response
 from datetime import datetime
 from progress.bar import Bar
 from multiprocessing import Pool
-from user.misc.user import get_users_info
-from user.misc import remove_duplicates
-from misc import print_g, print_e
+from panel.user.misc.user import get_users_info
+from panel.user.misc import remove_duplicates
+from panel.misc import print_g, print_e
 
 def get_media_noexcept_w(id, token, t):
     data = []

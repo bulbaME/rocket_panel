@@ -2,7 +2,7 @@ from user import user_actions
 from hashtag import hashtag_actions
 from location import location_actions
 from compare import compare_actions
-from misc import get_token, mkdir_output, print_t, RB, GB, RS
+from .misc import get_token, mkdir_output, print_t, RB, GB, RS
 from rocketapi import InstagramAPI
 
 def main():

@@ -1,23 +1,15 @@
 from rocketapi import InstagramAPI
-from misc import check_response
+from panel.misc import check_response
 from . import remove_duplicates
-from misc import get_token, print_g, print_e
+from panel.misc import get_token, print_g, print_e
 from progress.bar import Bar
 from multiprocessing import Pool
 
 def get_followers_pagintation_type(id, api):
     data = {}
     
-    while True:
-        try:
-            print_g('\nRetrieving pagination type...')
-            data = api.get_user_followers(id)
-            check_response(data)
-            break
-        except BaseException as e:
-            print_e(e)
-            if input('Repeat? (y/n): ').lower().strip() != 'y':
-                return -1
+    data = api.get_user_followers(id)
+    check_response(data)
             
     try:
         int(data['next_max_id'])
@@ -97,8 +89,12 @@ def get_followers_noexcept_w_2(id, token, max_id, count=100):
             i -= 1
             if i == 0:
                 return ([], max_id, e)
-        
-    return (data["users"], data["next_max_id"], None)
+    
+    max_id = None
+    if 'next_max_id' in list(data.keys()):
+        max_id = data['next_max_id']
+
+    return (data["users"], max_id, None)
 
 def get_followers_2(id, count):
     data = []

@@ -1,6 +1,6 @@
 from .misc.followers import get_followers_1, get_followers_2, get_followers_pagintation_type
 from .misc.user import get_users_info
-from misc import print_g, print_e
+from panel.misc import print_g, print_e
 
 def action_followers(api, user_data):
     count = 100

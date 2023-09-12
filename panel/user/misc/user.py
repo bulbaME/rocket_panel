@@ -1,6 +1,6 @@
 from rocketapi import InstagramAPI
-from misc import check_response
-from misc import get_token
+from panel.misc import check_response
+from panel.misc import get_token
 from progress.bar import Bar
 from multiprocessing import Pool
 

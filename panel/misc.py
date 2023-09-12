@@ -1,5 +1,6 @@
 import os
 import colorama
+import yaml
 colorama.init()
 
 RB = colorama.Fore.RED + colorama.Style.BRIGHT
@@ -7,10 +8,8 @@ GB = colorama.Fore.GREEN + colorama.Style.BRIGHT
 RS = colorama.Style.RESET_ALL
 
 def get_token():
-    fr = open('TOKEN')
-    token = fr.readline().strip()
-    fr.close()
-    return token
+    t = yaml.safe_load(open('credentials.yaml'))['rocket_api']['token']
+    return t
 
 def mkdir_output():
     if not os.path.exists('output'):

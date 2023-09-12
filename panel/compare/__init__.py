@@ -1,5 +1,5 @@
 import os
-from misc import print_g, print_e, GB, RS
+from panel.misc import print_g, print_e, GB, RS
 
 def compare_actions():
     while True:

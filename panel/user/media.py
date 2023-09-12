@@ -1,7 +1,7 @@
 from .misc.media import get_media, get_likes, get_comments
 from .misc.user import get_users_info
 from datetime import datetime
-from misc import print_g, print_e
+from panel.misc import print_g, print_e
 
 def action_media(api, user_data):
     print(f'@{user_data["username"]} has {user_data["media_count"]} media')

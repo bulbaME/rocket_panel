@@ -1,7 +1,7 @@
 from rocketapi import InstagramAPI
-from misc import check_response
+from panel.misc import check_response
 from . import remove_duplicates
-from misc import get_token, print_g, print_e
+from panel.misc import get_token, print_g, print_e
 from progress.bar import Bar
 from multiprocessing import Pool
 
@@ -94,7 +94,10 @@ def get_likes_noexcept_w(code, token, max_id):
             if i == 0:
                 return ([], max_id, e)
         
-    return (data['edges'], data['page_info']['end_cursor'], None)
+    users = data['edges']
+    users = [u['node'] for u in users]
+
+    return (users, data['page_info']['end_cursor'], None)
 
 def get_likes(code, count):
     data = []

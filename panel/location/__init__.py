@@ -1,6 +1,6 @@
-from misc import check_response
+from panel.misc import check_response
 from .media import action_media
-from misc import print_g, print_e, RB, RS
+from panel.misc import print_g, print_e, RB, RS
 
 def location_actions(api):
     id = input('Instagram location id - !').strip()

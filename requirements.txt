@@ -1,3 +1,5 @@
 rocketapi
 progress
 colorama
+python-telegram-bot
+Pillow
