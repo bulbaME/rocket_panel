@@ -66,6 +66,8 @@ async def menu_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['count'] = None
     context.user_data['max_id'] = None
     context.user_data['media'] = None
+    context.user_data['back_txt'] = '👤 User menu'
+    context.user_data['back_data'] = steps['PANEL']['USER']
 
     profile_data = context.user_data['profile_data']
     res = requests.get(profile_data['profile_pic_url_hd'])

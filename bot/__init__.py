@@ -9,12 +9,15 @@ from . import auth
 from . import panel
 from . import user
 from . import media
+from . import hashtag
+from . import location
+from . import compare
 from .misc import steps
 
 TOKEN = yaml.safe_load(open('credentials.yaml'))['tg']['token']
 
 logging.basicConfig(
-    filename='logs.log',
+    # filename='logs.log',
     encoding='utf-8',
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
@@ -89,9 +92,9 @@ def main():
         {
             steps['PANEL']['SELECTION']: [
                 CallbackQueryHandler(user.user_command, pattern=f'^{steps["PANEL"]["USER"]}$'), 
-                CallbackQueryHandler(None, pattern=f'^{steps["PANEL"]["LOCATION"]}$'), 
-                CallbackQueryHandler(None, pattern=f'^{steps["PANEL"]["HASHTAG"]}$'),
-                CallbackQueryHandler(None, pattern=f'^{steps["PANEL"]["COMPARE"]}$'),
+                CallbackQueryHandler(location.location_command, pattern=f'^{steps["PANEL"]["LOCATION"]}$'), 
+                CallbackQueryHandler(hashtag.hashtag_command, pattern=f'^{steps["PANEL"]["HASHTAG"]}$'),
+                CallbackQueryHandler(compare.compare_command, pattern=f'^{steps["PANEL"]["COMPARE"]}$'),
                 CallbackQueryHandler(panel.menu_command, pattern=f'^{steps["PANEL"]["ENTRY"]}$'),
                 menu_handler
             ],
@@ -153,7 +156,42 @@ def main():
                 CallbackQueryHandler(user.users_send_file_command, pattern=f'^{steps["USER"]["USERS_SEND"]}$', block=False),
                 CallbackQueryHandler(user.users_info_send_file_command, pattern=f'^{steps["USER"]["USERS_INFO_SEND"]}$', block=False),
                 CallbackQueryHandler(user.menu_command, pattern=f'^{steps["PANEL"]["USER"]}$'),
-            ]
+                CallbackQueryHandler(hashtag.menu_command, pattern=f'^{steps["HASHTAG"]["SELECTION"]}$'),
+                CallbackQueryHandler(location.menu_command, pattern=f'^{steps["LOCATION"]["SELECTION"]}$'),
+                CallbackQueryHandler(media.menu_command, pattern=f'^{steps["MEDIA"]["ENTRY"]}$'),
+                CallbackQueryHandler(panel.menu_command, pattern=f'^{steps["PANEL"]["ENTRY"]}$'),
+            ],
+            steps['HASHTAG']['GET_HASHTAG']: [MessageHandler(filters.TEXT, hashtag.get_hashtag_command)],
+            steps['HASHTAG']['SELECTION']: [
+                CallbackQueryHandler(hashtag.menu_command, pattern=f'^{steps["PANEL"]["HASHTAG"]}$'),
+                CallbackQueryHandler(hashtag.media_command, pattern=f'^{steps["HASHTAG"]["MEDIA"]}$'),
+                CallbackQueryHandler(panel.menu_command, pattern=f'^{steps["PANEL"]["ENTRY"]}$'),
+            ],
+            steps['HASHTAG']['MEDIA_GET']: [MessageHandler(filters.TEXT, hashtag.media_get_command)],
+            steps['HASHTAG']['MEDIA_CONTINUE']: [
+                CallbackQueryHandler(hashtag.media_continue_command, pattern=f'^{steps["HASHTAG"]["MEDIA_CONTINUE"]}$'),
+                CallbackQueryHandler(hashtag.menu_command, pattern=f'^{steps["HASHTAG"]["SELECTION"]}$')
+            ],
+            steps['LOCATION']['GET_LOCATION']: [MessageHandler(filters.TEXT, location.get_location_command)],
+            steps['LOCATION']['SELECTION']: [
+                CallbackQueryHandler(location.menu_command, pattern=f'^{steps["PANEL"]["LOCATION"]}$'),
+                CallbackQueryHandler(location.media_command, pattern=f'^{steps["LOCATION"]["MEDIA"]}$'),
+                CallbackQueryHandler(panel.menu_command, pattern=f'^{steps["PANEL"]["ENTRY"]}$'),
+            ],
+            steps['LOCATION']['MEDIA_GET']: [MessageHandler(filters.TEXT, location.media_get_command)],
+            steps['LOCATION']['MEDIA_CONTINUE']: [
+                CallbackQueryHandler(location.media_continue_command, pattern=f'^{steps["LOCATION"]["MEDIA_CONTINUE"]}$'),
+                CallbackQueryHandler(location.menu_command, pattern=f'^{steps["LOCATION"]["SELECTION"]}$')
+            ],
+            steps['COMPARE']['GET_FILES']: [
+                MessageHandler(filters.Document.TXT, compare.get_files_command),
+                CallbackQueryHandler(panel.menu_command, pattern=f'^{steps["PANEL"]["ENTRY"]}$')
+            ],
+            steps['COMPARE']['SELECTION']: [
+                CallbackQueryHandler(compare.compare_match_command, pattern=f'^{steps["COMPARE"]["MATCH"]}$'),
+                CallbackQueryHandler(compare.compare_diff_command, pattern=f'^{steps["COMPARE"]["DIFF"]}$'),
+                CallbackQueryHandler(panel.menu_command, pattern=f'^{steps["PANEL"]["ENTRY"]}$')
+            ],
         },
         []
     )

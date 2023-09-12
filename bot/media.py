@@ -95,6 +95,9 @@ async def select_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     profile_info = context.user_data['profile_info']
     
+    context.user_data['back_txt'] = '🎞 Media menu'
+    context.user_data['back_data'] = steps['MEDIA']['ENTRY']
+
     api = InstagramAPI(get_rocket_token())
     context.user_data['api'] = api
     media = context.user_data['media']

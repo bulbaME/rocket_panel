@@ -31,7 +31,7 @@ def get_media_noexcept_w(id, token, t):
     posts = []
     for v in data['sections']:
         for m in v['layout_content']['medias']:
-            posts.append(m['media'])
+            posts.append(m['media']['user'])
 
     return (posts, (max_id, page), None)
 

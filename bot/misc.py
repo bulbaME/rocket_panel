@@ -62,6 +62,28 @@ steps = {
         'LIKES_CONTINUE': gci(),
         'COMMENTS': gci(),
         'COMMENTS_CONTINUE': gci(),
+    },
+    'HASHTAG': {
+        'GET_HASHTAG': gci(),
+        'SELECTION': gci(),
+        'MEDIA': gci(),
+        'MEDIA_GET': gci(),
+        'MEDIA_CONTINUE': gci(),
+        'INFO': gci()
+    },
+    'LOCATION': {
+        'GET_LOCATION': gci(),
+        'SELECTION': gci(),
+        'MEDIA': gci(),
+        'MEDIA_GET': gci(),
+        'MEDIA_CONTINUE': gci(),
+        'INFO': gci()
+    },
+    'COMPARE': {
+        'GET_FILES': gci(),
+        'SELECTION': gci(),
+        'MATCH': gci(),
+        'DIFF': gci(),
     }
 }
 
@@ -71,7 +93,7 @@ async def users_send_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     btn_1 = InlineKeyboardButton('👥 Only usernames', callback_data=steps['USER']['USERS_SEND'])
     btn_2 = InlineKeyboardButton('📃 Each user data', callback_data=steps['USER']['USERS_INFO_SEND'])
-    btn_3 = InlineKeyboardButton('👤 User menu', callback_data=steps['PANEL']['USER'])
+    btn_3 = InlineKeyboardButton(context.user_data['back_txt'], callback_data=context.user_data['back_data'])
 
     keyboard = InlineKeyboardMarkup([[btn_1, btn_2], [btn_3]])
 
@@ -91,13 +113,13 @@ async def users_send_file_command(update: Update, context: ContextTypes.DEFAULT_
     fw.write(users)
     fw.close()
 
-    btn_1 = InlineKeyboardButton('👤 User menu', callback_data=steps['PANEL']['USER'])
+    btn_1 = InlineKeyboardButton(context.user_data['back_txt'], callback_data=context.user_data['back_data'])
     btn_2 = InlineKeyboardButton('🕹 Main menu', callback_data=steps['PANEL']['ENTRY'])
     keyboard = InlineKeyboardMarkup([[btn_1], [btn_2]])
 
     await context.bot.send_document(chat_id, open('data/tmp'), reply_markup=keyboard, filename=f'{context.user_data["profile_info"]["username"]}.users.txt')
 
-    return steps['USER']['SELECTION']
+    return steps['USER']['USERS_SEND']
 
 async def users_info_send_file_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_name = update.effective_user.username
@@ -131,10 +153,10 @@ async def users_info_send_file_command(update: Update, context: ContextTypes.DEF
     fw.write(data)
     fw.close()
 
-    btn_1 = InlineKeyboardButton('👤 User menu', callback_data=steps['PANEL']['USER'])
+    btn_1 = InlineKeyboardButton(context.user_data['back_txt'], callback_data=context.user_data['back_data'])
     btn_2 = InlineKeyboardButton('🕹 Main menu', callback_data=steps['PANEL']['ENTRY'])
     keyboard = InlineKeyboardMarkup([[btn_1], [btn_2]])
 
     await context.bot.send_document(chat_id, open('data/tmp', encoding='utf-8'), reply_markup=keyboard, filename=f'{context.user_data["profile_info"]["username"]}.users.csv')
 
-    return steps['USER']['SELECTION']
+    return steps['USER']['USERS_SEND']
