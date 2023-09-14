@@ -161,7 +161,8 @@ async def followers_get_command(update: Update, context: ContextTypes.DEFAULT_TY
 
             return steps['USER']['FOLLOWERS_CONTINUE']
 
-        msg = await msg.edit_text(f'👥 Getting followers `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+        if len(d) != 0:
+            msg = await msg.edit_text(f'👥 Getting followers `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
@@ -200,7 +201,8 @@ async def followers_continue_command(update: Update, context: ContextTypes.DEFAU
 
             return steps['USER']['FOLLOWERS_CONTINUE']
 
-        msg = await msg.edit_text(f'👥 Getting followers `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+        if len(d) != 0:
+            msg = await msg.edit_text(f'👥 Getting followers `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
@@ -392,7 +394,8 @@ async def media_get_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             return steps['USER']['MEDIA_CONTINUE']
 
-        msg = await msg.edit_text(f'🎞 Getting media `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+        if len(d) != 0:
+            msg = await msg.edit_text(f'🎞 Getting media `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['media'] = data
     context.user_data['count'] = len(data)
@@ -431,7 +434,8 @@ async def media_continue_command(update: Update, context: ContextTypes.DEFAULT_T
 
             return steps['USER']['MEDIA_CONTINUE']
 
-        msg = await msg.edit_text(f'🎞 Getting media `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+        if len(d) != 0:
+            msg = await msg.edit_text(f'🎞 Getting media `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['media'] = data
     context.user_data['count'] = len(data)

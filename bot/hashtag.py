@@ -141,7 +141,8 @@ async def media_get_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             return steps['HASHTAG']['MEDIA_CONTINUE']
 
-        msg = await msg.edit_text(f'\#️⃣ Getting posts `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+        if len(d) != 0:
+            msg = await msg.edit_text(f'\#️⃣ Getting posts `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
@@ -192,7 +193,8 @@ async def media_continue_command(update: Update, context: ContextTypes.DEFAULT_T
 
             return steps['HASHTAG']['MEDIA_CONTINUE']
 
-        msg = await msg.edit_text(f'\#️⃣ Getting posts `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+        if len(d) != 0:
+            msg = await msg.edit_text(f'\#️⃣ Getting posts `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)

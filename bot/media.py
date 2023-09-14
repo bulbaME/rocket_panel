@@ -192,7 +192,8 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             return steps['MEDIA']['LIKES_CONTINUE']
 
-        msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+        if len(d) != 0:
+            msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
@@ -231,7 +232,8 @@ async def likes_continue_command(update: Update, context: ContextTypes.DEFAULT_T
 
             return steps['MEDIA']['LIKES_CONTINUE']
 
-        msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+        if len(d) != 0:
+            msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
@@ -272,7 +274,8 @@ async def comments_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             return steps['MEDIA']['COMMENTS_CONTINUE']
 
-        msg = await msg.edit_text(f'📃 Getting comments `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+        if len(d) != 0:
+            msg = await msg.edit_text(f'📃 Getting comments `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
@@ -311,7 +314,8 @@ async def comments_continue_command(update: Update, context: ContextTypes.DEFAUL
 
             return steps['MEDIA']['COMMENTS_CONTINUE']
 
-        msg = await msg.edit_text(f'📃 Getting comments `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+        if len(d) != 0:
+            msg = await msg.edit_text(f'📃 Getting comments `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
