@@ -193,7 +193,8 @@ def main():
                 CallbackQueryHandler(panel.menu_command, pattern=f'^{steps["PANEL"]["ENTRY"]}$')
             ],
         },
-        []
+        [],
+        allow_reentry=True
     )
 
     # add handlers

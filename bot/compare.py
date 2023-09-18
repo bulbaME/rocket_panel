@@ -98,7 +98,7 @@ async def compare_diff_command(update: Update, context: ContextTypes.DEFAULT_TYP
     btn = InlineKeyboardButton('🕹 Main menu', callback_data=steps['PANEL']['ENTRY'])
 
     keyboard = InlineKeyboardMarkup([[btn]])
-    await context.bot.send_document(chat_id, open('data/tmp', encoding='utf-8'), reply_markup=keyboard, filename='matches.txt')
+    await context.bot.send_document(chat_id, open('data/tmp', encoding='utf-8'), reply_markup=keyboard, filename='differences.txt')
 
     return steps['PANEL']['SELECTION']
 
@@ -123,6 +123,6 @@ async def compare_match_command(update: Update, context: ContextTypes.DEFAULT_TY
     btn = InlineKeyboardButton('🕹 Main menu', callback_data=steps['PANEL']['ENTRY'])
 
     keyboard = InlineKeyboardMarkup([[btn]])
-    await context.bot.send_document(chat_id, open('data/tmp', encoding='utf-8'), reply_markup=keyboard, filename='differences.txt')
+    await context.bot.send_document(chat_id, open('data/tmp', encoding='utf-8'), reply_markup=keyboard, filename='matches.txt')
 
     return steps['PANEL']['SELECTION']
