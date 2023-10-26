@@ -37,7 +37,7 @@ def get_users_info(users, id_f='pk'):
 
 def get_str_val(data, k):
     try:
-        return data[k]
+        return str(data[k])
     except BaseException:
         return ''
 

@@ -139,15 +139,15 @@ async def users_info_send_file_command(update: Update, context: ContextTypes.DEF
         pool.close()
         pool.join()
 
-    user_info = [rocket_user.parse_user_data(u) for u in user_info]
     msg = await msg.edit_text(f'👥 Getting users info complete ✅', parse_mode=ParseMode.MARKDOWN_V2)
 
-    data = ''
+    if len(user_info) == 0:
+        return steps['USER']['USERS_SEND']
+
+    data = ', '.join(user_info[0].keys()) + '\n'
 
     for d in user_info:
-        for v in d.values():
-            data += f'{v}, '
-        data += '\n'
+        data += f'{", ".join(d.values())}\n'
 
     fw = open('data/tmp', 'w', encoding='utf-8')
     fw.write(data)
