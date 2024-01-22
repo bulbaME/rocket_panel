@@ -85,19 +85,18 @@ def get_likes_noexcept_w(code, token, max_id):
 
     while True:
         try:
-            r = api.get_media_likes(code, count=50, max_id=max_id)
+            r = api.get_media_likes(code)
             check_response(r)
-            data = r['data']['shortcode_media']['edge_liked_by']
+            data = r
             break
         except BaseException as e:
             i -= 1
             if i == 0:
                 return ([], max_id, e)
         
-    users = data['edges']
-    users = [u['node'] for u in users]
+    users = data["users"]
 
-    return (users, data['page_info']['end_cursor'], None)
+    return users
 
 def get_likes(code, count):
     data = []
