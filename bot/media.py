@@ -165,18 +165,22 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     post = context.user_data['post']
     count = int(post['like_count'])
+    if count > 1000:
+        count *= 0.85
+        count = int(count)
 
     msg = await context.bot.send_message(chat_id, f'👍 Getting likes `[0/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
     
-    data = []
+    data = {}
 
     rocket_token = get_rocket_token()
 
     max_id = None
 
     while len(data) < count:
-        (d, max_id, e) = rocket_media.get_likes_noexcept_w(post['code'], rocket_token, max_id)
-        data.extend(d)
+        p = rocket_media.get_likes_noexcept_w(post['code'], rocket_token, max_id)
+        for u in p: 
+            data[p['pk']] = p
 
         if e != None:
             btn_1 = InlineKeyboardButton('▶ Continue', callback_data=steps['MEDIA']['LIKES_CONTINUE'])
@@ -194,6 +198,8 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if len(d) != 0:
             msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+
+    data = [v for v in data.values()]
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
