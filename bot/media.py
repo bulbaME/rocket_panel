@@ -167,9 +167,8 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     post = context.user_data['post']
     count = int(post['like_count'])
-    if count > 1000:
-        count *= 0.85
-        count = int(count)
+    count *= 0.85
+    count = int(count)
 
     msg = await context.bot.send_message(chat_id, f'👍 Getting likes `[0/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
     
