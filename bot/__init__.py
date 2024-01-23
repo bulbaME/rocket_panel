@@ -17,7 +17,7 @@ from .misc import steps
 TOKEN = yaml.safe_load(open('credentials.yaml'))['tg']['token']
 
 logging.basicConfig(
-    filename='logs.log',
+    #filename='logs.log',
     encoding='utf-8',
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.ERROR
