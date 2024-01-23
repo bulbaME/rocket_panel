@@ -180,7 +180,7 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     while len(data) < count:
         p = rocket_media.get_likes_noexcept_w(post['code'], rocket_token, max_id)
         for u in p: 
-            data[p['pk']] = p
+            data[int(p['pk'])] = p
 
         if e != None:
             btn_1 = InlineKeyboardButton('▶ Continue', callback_data=steps['MEDIA']['LIKES_CONTINUE'])
