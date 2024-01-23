@@ -175,14 +175,12 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     rocket_token = get_rocket_token()
 
-    max_id = None
-
     while len(data) < count:
-        p = rocket_media.get_likes_noexcept_w(post['code'], rocket_token, max_id)
+        (p, e) = rocket_media.get_likes_noexcept_w(post['code'], rocket_token)
         for u in p: 
             data[u['pk']] = p
 
-        if e != None:
+        if not e:
             btn_1 = InlineKeyboardButton('▶ Continue', callback_data=steps['MEDIA']['LIKES_CONTINUE'])
             btn_2 = InlineKeyboardButton('👤 User menu', callback_data=steps['PANEL']['USER'])
 
@@ -203,8 +201,7 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
-    context.user_data['max_id'] = max_id
-    context.user_data['iid'] = 'id'
+    context.user_data['iid'] = 'pk'
 
     return await users_send_command(update, context)
 
@@ -215,16 +212,16 @@ async def likes_continue_command(update: Update, context: ContextTypes.DEFAULT_T
 
     count = context.user_data['count']
     data = context.user_data['data']
-    max_id = context.user_data['max_id']
 
     msg = await context.bot.send_message(chat_id, f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
     rocket_token = get_rocket_token()
 
     while len(data) < count:
-        (d, max_id, e) = rocket_media.get_likes_noexcept_w(post['code'], rocket_token, max_id)
-        data.extend(d)
+        (p, e) = rocket_media.get_likes_noexcept_w(post['code'], rocket_token)
+        for u in p:
+            data[u['pk']] = u
 
-        if e != None:
+        if not e:
             btn_1 = InlineKeyboardButton('▶ Continue', callback_data=steps['MEDIA']['LIKES_CONTINUE'])
             btn_2 = InlineKeyboardButton('👤 User menu', callback_data=steps['PANEL']['USER'])
 
