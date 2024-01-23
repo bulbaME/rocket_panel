@@ -15,6 +15,8 @@ from panel.misc import get_token as get_rocket_token
 import panel.user.misc.media as rocket_media
 import panel.user.misc.user as rocket_user
 
+LIKE_FETCH_LIMIT_RATE = 0.1
+
 async def menu_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_name = update.effective_user.username
     chat_id = update.effective_chat.id
@@ -172,10 +174,14 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = await context.bot.send_message(chat_id, f'👍 Getting likes `[0/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
     
     data = {}
+    
+    last_c = 0
+    limit = count * LIKE_FETCH_LIMIT_RATE
 
     rocket_token = get_rocket_token()
 
-    while len(data) < count:
+    while len(data) < count and limit > 0:
+        limit -= 1
         (p, e) = rocket_media.get_likes_noexcept_w(post['code'], rocket_token)
         for u in p: 
             data[u['pk']] = p
@@ -193,8 +199,10 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             return steps['MEDIA']['LIKES_CONTINUE']
 
-        if len(data) != 0:
+        if len(data) != last_c:
             msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+
+        last_c = len(data)
 
     data = [v for v in data.values()]
 
@@ -215,7 +223,11 @@ async def likes_continue_command(update: Update, context: ContextTypes.DEFAULT_T
     msg = await context.bot.send_message(chat_id, f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
     rocket_token = get_rocket_token()
 
-    while len(data) < count:
+    last_c = 0
+    limit = count * LIKE_FETCH_LIMIT_RATE
+
+    while len(data) < count and limit > 0:
+        limit -= 1
         (p, e) = rocket_media.get_likes_noexcept_w(post['code'], rocket_token)
         for u in p:
             data[u['pk']] = u
@@ -233,8 +245,10 @@ async def likes_continue_command(update: Update, context: ContextTypes.DEFAULT_T
 
             return steps['MEDIA']['LIKES_CONTINUE']
 
-        if len(data) != 0:
+        if len(data) != last_c:
             msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+
+        last_c = len(data)
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
