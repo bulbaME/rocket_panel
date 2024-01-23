@@ -77,7 +77,7 @@ def get_media(id, count):
     
     return data
 
-def get_likes_noexcept_w(code, token, max_id):
+def get_likes_noexcept_w(code, token):
     data = []
     api = InstagramAPI(token=token)
 
