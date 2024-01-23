@@ -200,6 +200,7 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if len(data) != last_c:
             msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+            break
 
         last_c = len(data)
 
@@ -246,6 +247,7 @@ async def likes_continue_command(update: Update, context: ContextTypes.DEFAULT_T
 
         if len(data) != last_c:
             msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
+            break
 
         last_c = len(data)
 
