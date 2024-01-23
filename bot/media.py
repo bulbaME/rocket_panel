@@ -180,7 +180,7 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         for u in p: 
             data[u['pk']] = p
 
-        if not e:
+        if e != None:
             btn_1 = InlineKeyboardButton('▶ Continue', callback_data=steps['MEDIA']['LIKES_CONTINUE'])
             btn_2 = InlineKeyboardButton('👤 User menu', callback_data=steps['PANEL']['USER'])
 
@@ -188,7 +188,6 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             context.user_data['data'] = data
             context.user_data['count'] = count
-            context.user_data['max_id'] = max_id
 
             await context.bot.send_message(chat_id, error_msg(e), parse_mode=ParseMode.MARKDOWN_V2, reply_markup=keyboard)
 
@@ -221,7 +220,7 @@ async def likes_continue_command(update: Update, context: ContextTypes.DEFAULT_T
         for u in p:
             data[u['pk']] = u
 
-        if not e:
+        if e != None:
             btn_1 = InlineKeyboardButton('▶ Continue', callback_data=steps['MEDIA']['LIKES_CONTINUE'])
             btn_2 = InlineKeyboardButton('👤 User menu', callback_data=steps['PANEL']['USER'])
 
@@ -229,7 +228,6 @@ async def likes_continue_command(update: Update, context: ContextTypes.DEFAULT_T
 
             context.user_data['data'] = data
             context.user_data['count'] = count
-            context.user_data['max_id'] = max_id
 
             await context.bot.send_message(chat_id, error_msg(e), parse_mode=ParseMode.MARKDOWN_V2, reply_markup=keyboard)
 
@@ -240,8 +238,7 @@ async def likes_continue_command(update: Update, context: ContextTypes.DEFAULT_T
 
     context.user_data['data'] = data
     context.user_data['count'] = len(data)
-    context.user_data['max_id'] = max_id
-    context.user_data['iid'] = 'id'
+    context.user_data['iid'] = 'pk'
 
     return await users_send_command(update, context)
 
