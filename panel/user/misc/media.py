@@ -92,7 +92,7 @@ def get_likes_noexcept_w(code, token, max_id):
         except BaseException as e:
             i -= 1
             if i == 0:
-                return ([], max_id, e)
+                return ([])
         
     users = data["users"]
 
