@@ -193,7 +193,7 @@ async def likes_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             return steps['MEDIA']['LIKES_CONTINUE']
 
-        if len(d) != 0:
+        if len(data) != 0:
             msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     data = [v for v in data.values()]
@@ -233,7 +233,7 @@ async def likes_continue_command(update: Update, context: ContextTypes.DEFAULT_T
 
             return steps['MEDIA']['LIKES_CONTINUE']
 
-        if len(d) != 0:
+        if len(data) != 0:
             msg = await msg.edit_text(f'👍 Getting likes `[{len(data)}/{count}]`', parse_mode=ParseMode.MARKDOWN_V2)
 
     context.user_data['data'] = data
